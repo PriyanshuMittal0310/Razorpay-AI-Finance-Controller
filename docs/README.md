@@ -41,3 +41,9 @@ For engineers maintaining or debugging specific components of the controller:
   Read [ui-guide.md](ui-guide.md) (§ Cash Forecast Tab) and [architecture.md](architecture.md) (§ Tier 5 Unsettled Receivables).
 - **UI styling discrepancies or theme regressions:**
   Read [ui-guide.md](ui-guide.md) (§ Design Tokens & CSS Isolation).
+
+---
+
+## License
+
+This project is released under the **MIT License**. See [`LICENSE`](../LICENSE) in the repository root.

@@ -4,11 +4,63 @@
 
 > **The bar, verbatim:** *"Throughput plus measured accuracy plus an honest exception list. One cherry-picked match proves nothing."*
 
+**[▶ Watch the 5-minute demo video](PASTE_VIDEO_LINK_HERE)**
+
 ---
 
 ## What It Does
 
 This is a tiered, deterministic-first reconciliation engine that closes the loop between a merchant's payment ledger and bank settlement data. It processes a 64-record synthetic batch built from real Razorpay Test Mode API calls — matching payments against settlement credits, categorising every exception, and producing a fully auditable master record. The system directly answers three of the track's four named example directions: **Multi-source reconciliation** (the tiered core engine), **Settlement Q&A agent** (a natural-language-to-SQL interface grounded in the reconciliation table), and **Forward cash forecaster** (derived liquidity projection based on historical settlement lag). No record is left unaccounted for; every row lands in exactly one category.
+
+---
+
+## Project Status & Known Limitations
+
+### ✅ Completed
+
+- **Full Tiers 0–5 reconciliation pipeline** — LLM narrative extraction → exact ID join → fuzzy entity matching → DuckDB math verification with identity veto → bounded subset-sum bundle resolution → exhaustive orphan categorisation.
+- **Master reconciliation schema** — Unified `ReconciliationRecord` Parquet/DuckDB store with full audit trail (tier, confidence, candidate considered, rejection reason).
+- **Streamlit dashboard — 5 tabs** — Dashboard (KPI cards + timing breakdown), Audit Trail (filterable exceptions ledger), Settlement Q&A (NL-to-SQL with read-only safety gate), Cash Forecast (aging-bucket inflow projection), Datasets (raw inputs + master output).
+- **Edge-case hardening** — Empty-batch resilience (schema-valid 0-row Parquet on no-input), duplicate `settlement_utr` deduplication, null-safe fuzzy matching, 4-attempt LLM retry loop with 5-second backoff and clean fallback on total API failure.
+
+### ⚠️ Deliberately Deferred
+
+- **No LLM provider fallback.** If the Gemini API quota is exhausted mid-run, the pipeline fails at that tier. The LLM calls are isolated in `reasoning.py` behind a clean interface to make a fallback straightforward to add, but it is not implemented in this submission.
+- **Cash forecaster uses a simple historical-median-lag projection.** The T+2 gateway cycle is derived from observed settlement lags in the matched cohort — it is an operationally honest lag estimate, not a statistical time-series or ML model. The UI labels this explicitly.
+
+---
+
+## Try It Without Running the Pipeline
+
+A pre-computed `master_reconciliation_records.parquet` is committed to the repo under `data/sample_output/`. A judge can launch the Streamlit dashboard and inspect real reconciliation output immediately, without a Gemini API key or a local pipeline run:
+
+```bash
+# Clone and install
+git clone <your-repo-url>
+cd "Razorpay-AI FInance Controller"
+python -m venv venv
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # macOS / Linux
+pip install -r requirements.txt
+
+# Launch directly — no pipeline run needed
+cd src
+streamlit run app.py
+```
+
+The app will automatically detect and load `data/sample_output/master_reconciliation_records.parquet` if no freshly-run output is present.
+
+---
+
+## Screenshots
+
+| Dashboard | Audit Trail |
+|---|---|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Audit Trail](docs/screenshots/audit_trail.png) |
+
+| Settlement Q&A | Cash Forecast |
+|---|---|
+| ![Settlement Q&A](docs/screenshots/settlement_qa.png) | ![Cash Forecast](docs/screenshots/cash_forecast.png) |
 
 ---
 
@@ -45,10 +97,10 @@ The LLM is expensive and that shows — but it is only ever invoked on the resid
 
 ## Architecture & Pipeline Specification
 
-### The Thesis: Asymmetric Deterministic-First Funnel
-Cheap, deterministic arithmetic checks run first. The system escalates to an LLM only for residual cases where deterministic logic cannot establish certainty. In payment reconciliation, ground truth is mathematical conservation, not semantics. Determinism produces an auditable, reproducible record; language models produce plausible suggestions. A financial controller must always strictly prioritize the former.
+See [`docs/architecture.md`](docs/architecture.md) for the full tier-by-tier breakdown, exact numeric thresholds, the Tier 3 precision-trap safeguard, failure-mode behavior, and design rationale.
 
-The pipeline operates on an **asymmetric, deterministic-first funnel**. Strict arithmetic and exact joins resolve the bulk of transactions at near-zero compute cost, escalating residual exceptions to fuzzy identity matching, DuckDB mathematical verification, and finally bounded LLM reasoning.
+<details>
+<summary><strong>System data-flow diagram (click to expand)</strong></summary>
 
 ```mermaid
 flowchart TD
@@ -168,7 +220,10 @@ flowchart TD
     DUCKDB --> QA
 ```
 
----
+</details>
+
+### The Thesis: Asymmetric Deterministic-First Funnel
+Cheap, deterministic arithmetic checks run first. The system escalates to an LLM only for residual cases where deterministic logic cannot establish certainty. In payment reconciliation, ground truth is mathematical conservation, not semantics. Determinism produces an auditable, reproducible record; language models produce plausible suggestions. A financial controller must always strictly prioritize the former.
 
 ### Tier-by-Tier Deep Dive
 
@@ -186,7 +241,7 @@ flowchart TD
   - It does **not** make matching decisions.
   - It does **not** trust unverified LLM output: any string failing the regex gate is converted to `None`, forcing the row to fall through to Tier 2 rather than poisoning the deterministic Tier 1 join.
 - **Key Thresholds & Constants**:
-  - `FAST_LLM_MODEL = TIER0_EXTRACTION_MODEL` (`"gemini-3.6-flash"`)
+  - `TIER0_EXTRACTION_MODEL = "gemini-3.6-flash"` (from `src/config.py`)
   - Regex pattern: `^pay_[a-zA-Z0-9]{14}$`
 
 ---
@@ -222,7 +277,6 @@ flowchart TD
     ```
   - Computes absolute date delta in days:
     $$\text{date\_delta} = |\text{settlement\_date} - \text{payment\_date}|$$
-  - Computes candidate pair's fee-adjusted `expected_net` and `amount_delta`.
   - Applies 3 simultaneous gating filters:
     1. `identity_score >= 75.0`
     2. `date_delta <= 3` days
@@ -391,16 +445,6 @@ Match rate is computed over **matchable records only** — records where a settl
 
 Every exception row in the audit trail carries the tier at which it was last evaluated, the closest candidate that was considered, the similarity score, and the reason for rejection. A human reviewer can reconstruct exactly why each exception was not resolved.
 
-### Edge-Case Hardening & Adversarial Robustness
-
-A system that only succeeds on clean, hand-curated fixtures does not solve real finance operations. The pipeline has been explicitly hardened against adversarial and incomplete inputs:
-
-- **Empty-Batch Resilience (0 records):** If either the merchant ledger or bank settlement input has zero rows, Polars cannot infer column datatypes, which causes raw arithmetic expressions (e.g. `gross_amount - mdr_fee`) to crash on untyped columns. The pipeline enforces explicit schema casting and includes an upstream empty-batch guard: when zero matchable records exist, it writes a schema-valid, 0-row `master_reconciliation_records.parquet` rather than crashing midway through cross-join or DuckDB registration. Downstream consumers (`app.py`, `qa_agent.py`) receive a valid, empty table instead of an unhandled exception or missing file.
-- **Duplicate Bank Settlement UTR Deduplication:** Real-world bank statements and webhooks can occasionally deliver duplicate lines for the same transaction. The pipeline actively detects and deduplicates bank records on `settlement_utr` (keeping the first occurrence and logging a warning) prior to running any tier matching. This guarantees that a single bank settlement can never be claimed twice or double-count reconciled revenue.
-- **Null-Safe Fuzzy Identity Matching:** If Tier 0 LLM extraction fails to extract a counterparty entity name or encounters an unparseable narrative, downstream RapidFuzz `token_set_ratio` comparisons handle null/None values safely. Instead of throwing an unhandled exception or aborting the run, unextractable bank narratives fall through cleanly to Tier 3/Tier 5 orphan categories for audit inspection.
-
-This defensive design provides tangible proof that the engine degrades safely and gracefully under dirty, incomplete, or adversarial data — directly upholding the submission standard: *"Throughput plus measured accuracy plus an honest exception list. One cherry-picked match proves nothing."*
-
 ---
 
 ## Tech Stack
@@ -448,6 +492,8 @@ Raw source files (ledger CSV, bank statement CSV) and the final master reconcili
 
 ## How to Run
 
+> **Copy `.env.example` → `.env`** and fill in your `GEMINI_API_KEY` before running the pipeline. The `.env.example` file documents every required and optional environment variable.
+
 ```bash
 # 1. Clone and set up
 git clone <your-repo-url>
@@ -461,9 +507,9 @@ pip install -r requirements.txt
 **Key dependencies:** `polars`, `duckdb`, `rapidfuzz`, `pydantic`, `streamlit`, `plotly`, `google-genai`, `python-dotenv`
 
 ```bash
-# 2. Set your Gemini API key
-# Create a .env file in the project root:
-echo "GEMINI_API_KEY=your_key_here" > .env
+# 2. Configure environment
+cp .env.example .env
+# Edit .env and set GEMINI_API_KEY=your_key_here
 ```
 
 ```bash
@@ -519,12 +565,21 @@ Razorpay-AI FInance Controller/
 │   └── data/
 │       ├── pipeline_timing.json       # Per-stage runtime (written by pipeline)
 │       └── ...                        # Ledger CSV, bank CSV, master record
+├── data/
+│   └── sample_output/
+│       └── master_reconciliation_records.parquet   # Pre-computed output for quick demo
 ├── requirements.txt
-├── .env.example                       # Documented environment template
-├── .env                               # GEMINI_API_KEY (not committed)
+├── .env.example                       # Documented environment template (copy to .env)
 ├── .gitignore                         # Secret, cache, and DB exclusion rules
+├── LICENSE                            # MIT License
 └── README.md
 ```
+
+---
+
+## License
+
+This project is licensed under the **MIT License** — see [`LICENSE`](LICENSE) for the full text.
 
 ---
 
