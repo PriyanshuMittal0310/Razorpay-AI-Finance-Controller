@@ -1,0 +1,37 @@
+# Environment variables & sensitive credentials
+.env
+.env.*
+!.env.example
+rzp-key.csv
+*.csv.key
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+
+# Virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# DuckDB lock & journal files
+*.duckdb.wal
+*.duckdb.tmp
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# Operating System & IDE artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo

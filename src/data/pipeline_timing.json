@@ -1,0 +1,41 @@
+{
+  "total_duration_sec": 64.0562,
+  "total_records": 64,
+  "throughput_records_per_sec": 1.0,
+  "deterministic_time_sec": 0.6776,
+  "deterministic_pct": 1.1,
+  "llm_time_sec": 63.3786,
+  "llm_pct": 98.9,
+  "stages": [
+    {
+      "stage": "Tier 0: LLM Extraction",
+      "duration_sec": 35.8108,
+      "type": "llm",
+      "pct_of_total": 55.9
+    },
+    {
+      "stage": "Tier 1: Exact Match",
+      "duration_sec": 0.0099,
+      "type": "deterministic",
+      "pct_of_total": 0.0
+    },
+    {
+      "stage": "Tier 2: Fuzzy Match",
+      "duration_sec": 0.0234,
+      "type": "deterministic",
+      "pct_of_total": 0.0
+    },
+    {
+      "stage": "Tier 3: Math-Only & Identity Veto",
+      "duration_sec": 0.6443,
+      "type": "deterministic",
+      "pct_of_total": 1.0
+    },
+    {
+      "stage": "Tier 4: AI Bundle Resolution",
+      "duration_sec": 27.5678,
+      "type": "llm",
+      "pct_of_total": 43.0
+    }
+  ]
+}

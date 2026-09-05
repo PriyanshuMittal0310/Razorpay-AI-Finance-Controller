@@ -1,0 +1,56 @@
+order_id,payment_id,customer_name,gross_amount,mdr_fee,gst_on_mdr,refund_amount,payment_date,status
+order_TXI8E5QcjhVrj3,pay_5c04a95c0b8d49,Stark Industries,31164.74,623.29,112.19,0.0,2026-08-11,captured
+order_TXI8EkgJI7KtcC,pay_916d0d1a552343,Umbrella Inc,16547.92,330.96,59.57,0.0,2026-08-09,captured
+order_TXI8FPHXbR32FT,pay_4d4654f7ee6b41,Wayne Enterprises,23162.24,463.24,83.38,0.0,2026-08-08,captured
+order_TXI8G3UJ9gQFWX,pay_794f215dfed64c,Stark Industries,5923.62,118.47,21.32,0.0,2026-08-11,captured
+order_TXI8GlfkAwzuQx,pay_3681f7f1c4124d,Acme Corp,33991.68,679.83,122.37,0.0,2026-08-01,captured
+order_TXI8HNrsfQ7Nyx,pay_da7298e951bf42,Stark Industries,37497.63,749.95,134.99,0.0,2026-08-04,captured
+order_TXI8HzdPL73liC,pay_d60102b29c7940,Razorpay Software,33639.2,672.78,121.1,0.0,2026-08-11,captured
+order_TXI8Ic1hq2EUu1,pay_fe81ac703e204a,Acme Corp,14819.12,296.38,53.35,0.0,2026-08-19,captured
+order_TXI8JE8ZI40y1N,pay_87a9176666e847,Wayne Enterprises,43491.2,869.82,156.57,0.0,2026-08-16,captured
+order_TXI8JrgOIgqIq4,pay_548016f1c2e742,Wayne Enterprises,28959.65,579.19,104.25,0.0,2026-08-20,captured
+order_TXI8KVE8WlIObA,pay_3fa262206b1842,Wayne Enterprises,41648.47,0.0,0.0,0.0,2026-08-19,failed
+order_TXI8LAwHyfWPRS,pay_956988cab3a145,Stark Industries,41316.88,826.34,148.74,0.0,2026-08-17,captured
+order_TXI8LoDHelkrlX,pay_8ba918e0d0c443,Umbrella Inc,34473.19,689.46,124.1,17236.6,2026-08-19,refunded
+order_TXI8MTUxFwVO1g,pay_429359ee95284b,Acme Corp,19009.18,380.18,68.43,0.0,2026-08-14,captured
+order_TXI8N5xjT4voel,pay_634f89783b894d,Umbrella Inc,27982.0,0.0,0.0,0.0,2026-08-18,failed
+order_TXI8NhomPWsqfh,pay_933bfec11d2948,Wayne Enterprises,10043.73,200.87,36.16,0.0,2026-08-15,captured
+order_TXI8OK1GXK1FGn,pay_4d0925a3c7d746,Globex,16657.45,333.15,59.97,16657.45,2026-08-09,refunded
+order_TXI8OwPutjWbvZ,pay_232f7f1b4cf24b,Acme Corp,23303.29,466.07,83.89,0.0,2026-08-08,captured
+order_TXI8PcQUiut6fa,pay_81337502163845,Stark Industries,9573.51,0.0,0.0,0.0,2026-08-14,failed
+order_TXI8QEdo04OU32,pay_056816d4494645,Acme Corp,31440.59,628.81,113.19,0.0,2026-08-20,captured
+order_TXI8QrnOTSMy0x,pay_940809a86a1346,Razorpay Software,30095.88,601.92,108.35,0.0,2026-08-20,captured
+order_TXI8RU5EhFqPST,pay_314a0fd84d8e4d,Wayne Enterprises,20928.52,0.0,0.0,0.0,2026-08-11,failed
+order_TXI8S6PEK7yuvw,pay_5e1b7224aa7e4f,Razorpay Software,40783.85,815.68,146.82,0.0,2026-08-06,captured
+order_TXI8SiCUlltmLV,pay_933da7fc781e4a,Umbrella Inc,21306.55,0.0,0.0,0.0,2026-08-12,failed
+order_TXI8TKW0supIgX,pay_ca025237a60c40,Globex,10447.08,208.94,37.61,10447.08,2026-08-13,refunded
+order_TXI8TyBBYUH6KK,pay_9164631b09084c,Globex,34886.6,697.73,125.59,0.0,2026-08-03,captured
+order_TXI8UeMuosE2CB,pay_341cf0026d484f,Acme Corp,2262.41,0.0,0.0,0.0,2026-08-16,failed
+order_TXI8VKjbDLt7NS,pay_9a9e025691814b,Wayne Enterprises,25032.16,500.64,90.12,0.0,2026-08-08,captured
+order_TXI8W2h0HmkNXN,pay_7cc39dbc83494a,Acme Corp,20983.18,419.66,75.54,0.0,2026-08-10,captured
+order_TXI8Wn9GeRX7ma,pay_47e695b24e3249,Umbrella Inc,36987.61,739.75,133.16,0.0,2026-08-08,captured
+order_TXI8XPRSr3QCzA,pay_130d7697831345,Wayne Enterprises,14389.81,287.8,51.8,3597.45,2026-08-03,refunded
+order_TXI8Y3gQTLYily,pay_bb554672720343,Umbrella Inc,29312.41,586.25,105.52,0.0,2026-08-09,captured
+order_TXI8YtAYU8FbLM,pay_8b0e8014f59643,Globex,47114.15,942.28,169.61,0.0,2026-08-13,captured
+order_TXI8ZUiWNlUw9H,pay_37b51109bb2142,Umbrella Inc,16050.35,321.01,57.78,16050.35,2026-08-20,refunded
+order_TXI8a69CzlViE4,pay_54bc243c54fc4a,Acme Corp,22425.82,448.52,80.73,0.0,2026-08-14,captured
+order_TXI8ahuGfPf7fd,pay_65f746c52b6e46,Razorpay Software,44203.17,884.06,159.13,0.0,2026-08-07,captured
+order_TXI8bJaNwF69WL,pay_aef2aa876a8b49,Stark Industries,42625.08,852.5,153.45,0.0,2026-08-02,captured
+order_TXI8bwCqCm5Y1w,pay_f354f87f685540,Acme Corp,48670.51,973.41,175.21,0.0,2026-08-07,captured
+order_TXI8caDlk6VDtt,pay_7220786ec6564d,Acme Corp,22532.09,450.64,81.12,22532.09,2026-08-16,refunded
+order_TXI8dDXl20J07m,pay_3fea7484923e49,Umbrella Inc,8789.65,175.79,31.64,0.0,2026-08-14,captured
+order_TXI8dp8fFKUC2i,pay_b49a341f673140,Globex,26137.32,522.75,94.09,0.0,2026-08-01,captured
+order_TXI8eSFpwbpUJE,pay_47a5592c081e4d,Globex,28242.17,564.84,101.67,0.0,2026-08-19,captured
+order_TXI8f4KKtG6nDK,pay_ac5672fcfbbc4b,Stark Industries,25742.56,514.85,92.67,0.0,2026-08-09,captured
+order_TXI8fjTTO7sZwv,pay_d742ea5e10fe4f,Globex,45897.87,917.96,165.23,0.0,2026-08-17,captured
+order_TXI8gLgcJNCIjj,pay_561933fa8dc645,Razorpay Software,45316.75,906.34,163.14,0.0,2026-08-01,captured
+order_TXI8gzRPJJvrXg,pay_544a1f63249b45,Razorpay Software,3151.81,63.04,11.35,0.0,2026-08-05,captured
+order_TXI8hcsBSaTyrH,pay_bfe7ab37c8b841,Globex,49770.14,995.4,179.17,0.0,2026-08-17,captured
+order_TXI8iGcyLHtivk,pay_9d05e808074b4e,Stark Industries,10841.37,216.83,39.03,0.0,2026-08-14,captured
+order_TXI8iu6fLRkHFJ,pay_8ab0fc99bfff44,Stark Industries,24095.47,481.91,86.74,0.0,2026-08-15,captured
+order_TXI8jWVhBwPR0s,pay_45596ca01d1b43,Wayne Enterprises,1639.68,32.79,5.9,0.0,2026-08-05,captured
+order_TXI8k94xlYulh2,pay_dd1152cb85c140,Razorpay Software,34264.59,685.29,123.35,0.0,2026-08-10,captured
+order_TXI8klwIG9c9H5,pay_ece5130d5abf42,Wayne Enterprises,14997.71,299.95,53.99,0.0,2026-08-16,captured
+order_TXI8lNjqgaj06b,pay_ffeef44a61dd4c,Stark Industries,16279.62,325.59,58.61,0.0,2026-08-12,captured
+order_TXI8m0L60ZhI5g,pay_16b20b3d506c4c,Umbrella Inc,22787.6,455.75,82.03,0.0,2026-08-07,captured
+order_TXI8me2BPWF9uj,pay_582276cc23e840,Umbrella Inc,16001.17,0.0,0.0,0.0,2026-08-20,failed
